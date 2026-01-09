@@ -21,7 +21,9 @@ This document is expected to evolve as cutover approaches.
 
 | Version | Date       | Type        | Summary |
 |--------|------------|-------------|---------|
-| v1.0   | 2026-01-09 | Initial     | Initial cutover framework created |
+| v1.0   | 2026-01-XX | Initial     | Initial cutover framework created |
+| v1.1   | 2026-01-XX | Structural  | Added service enablement strategy and post-cutover hypercare |
+| v1.2   | 2026-01-XX | Governance  | Added SOM handover and operational readiness |
 
 ---
 
@@ -198,112 +200,147 @@ This document is expected to evolve as cutover approaches.
 This section covers GSM-specific setup required due to ETRM migration, including contract setup, user migration, access control, and security enablement prior to go-live. Data migration is owned by another team; GSM activities focus on configuration, controls, and readiness.
 
 ### GSM-7.1 Contract Setup in GSM (ETRM Migration Readiness)
-- Identify all existing storage contracts in scope for migration
+- Identify all existing storage contracts in scope for migration.
 - Set up contracts in GSM, including:
   - Single-location contracts
   - Multi-location contracts
 - Validate contract configuration:
   - Flowpoints, capacities, WGV, Decline Curves, Deal mappings etc
-- Validate contracts align with migrated data from the new ETRM
-- Confirm contract setup is complete before enabling live processing
+- Validate contracts align with migrated data from the new ETRM.
+- Confirm contract setup is complete before enabling live processing.
 
 **Dependencies**
 - ETRM data migration completed by upstream team
 - Contract definitions confirmed by business
 
 ### GSM-7.2 User Migration and Access Setup
-- Identify existing users from the legacy application
-- Create users in GSM V3
+- Identify existing users from the legacy application.
+- Create users in GSM V3.
 - Assign roles and permissions based on:
   - Current application access
   - GSM Read / Write access model
   - Enable ETRM uploads for eligible users
-- Define and agree a mechanism for assigning access in the new application
-- Validate user access
+- Define and agree a mechanism for assigning access in the new application.
+- Validate user access:
+  - Correct page access
+  - Restricted access enforced where applicable
 
 ### GSM-7.3 Application Access Enablement (Shell Access Management)
-- Request application onboarding into the access management tool
-- Configure access policies for GSM UI
-- Validate users can access GSM through the approved Shell access mechanism
+- Request application onboarding into the access management tool.
+- Configure access policies for:
+  - GSM UI
+- Validate users can access GSM through the approved Shell access mechanism.
 
 ### GSM-7.4 Web Application Firewall (WAF) Enablement (Pre-Go-Live)
-- Confirm whether WAF is mandatory for GSM in PROD
-- Request WAF enablement for GSM UI
-- Validate WAF configuration does not block valid application traffic
+- Confirm whether WAF is mandatory for GSM in PROD.
+- Request WAF enablement for:
+  - GSM UI
+- Validate WAF configuration does not block valid application traffic.
+- Validate logs and monitoring for WAF events.
 
 ---
 
 ## GSM-8 Deployment Governance and Controls
 
 ### GSM-8.1 Quality Gates and Approval Gates (SOM Process)
-- Configure quality gates and approvals for PROD pipelines
-- Validate approver groups
+- Request SOM team to configure quality gates for production pipelines, including:
+  - Pre-deployment validation checks
+  - Mandatory approvals before deployment
+- Configure approval gates for:
+  - Infrastructure pipeline (PROD)
+  - API deployment pipeline (PROD)
+  - UI deployment pipeline (PROD)
+- Validate approver groups are correctly defined and assigned.
 
 ### GSM-8.2 Deployment Sequencing
+Deployments must follow the order below.
+
 1. Deploy Infrastructure pipeline
 2. Deploy GSM API pipeline
 3. Deploy GSM UI pipeline
 
 ### GSM-8.3 Deployment Validation
-- Validate successful execution of each pipeline stage
-- Confirm no failed or skipped stages
+- Validate successful execution of each pipeline stage.
+- Confirm no failed, skipped, or partially completed stages remain.
 
 ### GSM-8.4 Final Readiness Confirmation
-- Confirm PROD pipeline configuration
-- Confirm QAT deployments completed successfully
-- Confirm SOM sign-off received
+- Confirm all production pipelines are correctly configured.
+- Confirm QAT deployment completed successfully.
+- Confirm SOM sign-off received.
 
 ### GSM-8.5 Service Enablement Strategy (Pre-Cutover Constraint)
-- Applications may be deployed pre-cutover
-- Services must remain disabled until cutover weekend
-- Enablement is a controlled cutover-only activity
+- Application components may be deployed in advance of cutover.
+- Pre-cutover deployments are expected to leave all GSM services disabled or dormant.
+- Azure Functions, WebJobs, and Kafka producers and consumers must not be enabled prior to the agreed cutover weekend.
+- Service enablement is a controlled activity and must only be performed during the cutover window.
+- Deployed but non-running services prior to cutover must not be treated as incidents or deployment failures.
+- Rollback procedures defined in GSM-10 remain applicable if service enablement is aborted or reversed during cutover.
 
 ### GSM-8.6 Operational Readiness and SOM Handover (Pre-Cutover)
-- Engage SOM team prior to cutover
-- Complete knowledge transfer and documentation handover
-- Confirm SOM readiness for primary operational support post-cutover
+- Engage SOM team as part of pre-cutover readiness activities.
+- Arrange and complete knowledge transfer sessions covering:
+  - GSM architecture and deployment model
+  - Service enablement strategy and cutover approach
+  - Monitoring, alerting, and logging setup
+  - Known constraints and operational considerations
+- Provide operational documentation and runbooks to SOM.
+- Confirm SOM team readiness to provide primary operational support post-cutover.
+- Agree escalation paths and points of contact.
+- Confirm handover completion prior to enabling GSM services.
 
 ---
 
 ## GSM-9 Connectivity and Smoke Testing (POST-DEPLOYMENT)
 
 ### GSM-9.1 UI Front-End Smoke Checks
-- Validate GSM UI availability and access
+- Verify GSM UI loads successfully in PROD.
+- Validate all key pages load without errors.
+- Validate user access and UI behaviour.
 
 ### GSM-9.2 Azure Functions and WebJobs Startup Validation
-- Confirm all Functions and WebJobs are running
+- Confirm all Azure Functions are started and running.
+- Confirm all Azure WebJobs are loaded and running.
+- Confirm no startup exceptions or repeated runtime errors.
 
-### GSM-9.3 Kafka Producer Smoke Validation
-- Validate producer startup without publishing business data
+### GSM-9.3 Kafka Producer Smoke Validation (Non-Intrusive)
+- Confirm producer initialises successfully.
+- Confirm Kafka connectivity and authentication.
+- No real business data published.
 
 ### GSM-9.4 Kafka Consumer and Acknowledgement Validation
-- Validate consumer readiness and stability
+- Confirm consumer readiness and stability.
+- Confirm acknowledgement path is ready for live traffic.
 
 ---
 
 ## GSM-10 Rollback Readiness and Parallel-Run Strategy
 
 ### GSM-10.1 Parallel Deployment Model
-- New GSM runs alongside existing application
+- New GSM application is deployed in parallel.
+- Existing application continues to run.
 
 ### GSM-10.2 Rollback Principle
-- Revert access and stop GSM services if required
+- Prevent further use of GSM.
+- Stop GSM services if required.
+- Allow existing application to continue operating.
 
 ### GSM-10.3 Rollback Options
-- Disable access
-- Stop GSM services
+- Disable access to GSM UI.
+- Stop GSM Web App, Azure Functions, and WebJobs.
 
 ### GSM-10.4 Automation / Scripted Rollback
-- Evaluate need for rollback automation
+- Evaluate need for rollback automation.
 
 ---
 
 ## GSM-11 Post-Cutover Hypercare and User Communication
 
 ### GSM-11.1 Post-Cutover Monitoring and Hypercare Period
-- Monitor GSM during defined hypercare window
-- Support SOM as required
+- Establish defined hypercare period (1–2 weeks).
+- Monitor GSM services and integrations.
+- Support SOM team during hypercare.
 
 ### GSM-11.2 User Communication and Go-Live Confirmation
-- Confirm successful cutover to users
-- Communicate support channels
+- Communicate successful cutover to users.
+- Confirm GSM is live and available.
+- Confirm support and escalation channels.
