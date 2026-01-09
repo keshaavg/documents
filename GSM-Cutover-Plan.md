@@ -21,9 +21,7 @@ This document is expected to evolve as cutover approaches.
 
 | Version | Date       | Type        | Summary |
 |--------|------------|-------------|---------|
-| v1.0   | 2026-01-XX | Initial     | Initial cutover framework created |
-| v1.1   | 2026-01-XX | Structural  | Added service enablement strategy and post-cutover hypercare |
-| v1.2   | 2026-01-XX | Governance  | Added SOM handover and operational readiness |
+| v1.0   | 2026-01-09 | Initial     | Initial cutover framework created |
 
 ---
 
