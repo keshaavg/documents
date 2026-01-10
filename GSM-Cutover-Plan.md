@@ -178,16 +178,16 @@ This document is expected to evolve as cutover approaches.
 ---
 
 ### GSM-5 Interfaces and External Integrations
-- Confirm MTS files for Endur are populated in SFTP
+- Confirm new MTS files for actuals are populated in SFTP
 - Validate transfer of actual and confirmed values
-- Question - SFTP details remain as for current process
+- Question - SFTP details remain as for current process?
 
 ---
 
 ### GSM-6 System Identities and Azure Resources
 - Create GSM API system-assigned managed identity (if not existing)
 - Create GSM Function App system-assigned managed identity (if not existing)
-- Assign Databricks Unity Catalog access
+- Request Databricks Unity Catalog access for managed identity and developers
 - Validate managed identity connectivity to Databricks
 
 ---
