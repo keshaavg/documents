@@ -133,7 +133,7 @@ This document is expected to evolve as cutover approaches.
 - ts_shell_energy_eun-unitycatalog-prd
 - ts_shell_energy_eun-unitycatalog-tst
 
-#### GSM-4.1a Databricks SQL Warehouse and Access Readiness (Pre-Cutover)
+#### GSM-4.1a Databricks SQL Warehouse and Access Readiness
 
 **Activities**
 - Create Databricks SQL Warehouse(s) required for GSM workloads in PROD (standard and frequent / intraday usage).
