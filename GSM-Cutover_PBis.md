@@ -1,22 +1,23 @@
-# GSM Cutover – Azure DevOps PBIs
+# GSM Cutover – Azure DevOps Modules and PBIs
 
-This document defines the Azure DevOps PBIs and tasks derived from the GSM Cutover Activity List.
-It is intended to support cutover readiness, execution, and post-cutover stabilisation.
+This document defines Azure DevOps Modules and Product Backlog Items (PBIs) derived from the GSM Cutover Activity List.
+It aligns with existing GSM ADA module-based backlog structure.
 
 ---
 
-## Feature 1: GSM Cutover Readiness
+## Module 16 – GSM Pre-Cutover Readiness
 
-### PBI 1.1 – Pre-Cutover Environment and Configuration Readiness
+### [GSM][ADA] Module 16.1 – Pre-Cutover Environment and Configuration Readiness
 
 **Description**  
-Verify PROD environment readiness for GSM cutover by confirming environment variables, Azure DevOps Library variable groups, and Key Vault references are correctly set up and resolvable. Internal application configuration is validated via standard pipelines and is not itemised.
+Verify PROD environment readiness for GSM cutover by confirming environment variables, Azure DevOps Library variable groups, service connections, and Key Vault references are correctly set up and resolvable. Internal application configuration is validated via standard pipelines and is not itemised.
 
 **Acceptance Criteria**
 - Required environment variables for GSM are present in PROD
 - Azure DevOps Library variable groups are correctly linked
 - Key Vault references resolve successfully
-- No unresolved or missing configuration detected
+- Pipeline service connections and permissions authorised
+- Evidence captured for readiness confirmation
 
 **Tasks**
 - Verify environment variables for GSM components
@@ -24,20 +25,18 @@ Verify PROD environment readiness for GSM cutover by confirming environment vari
 - Validate Key Vault references resolve successfully
 - Validate pipeline permissions and service connections
 - Capture readiness evidence
-- Raise and track ServiceNow requests for any gaps
+- Raise and track ServiceNow requests for gaps
 
 ---
 
-### PBI 1.2 – Kafka Client Identity, Topic Access, and Permissions Readiness
+### [GSM][ADA] Module 16.2 – Kafka Client Identity, Topic Access, and Permissions Readiness
 
 **Description**  
 Ensure Kafka identity and permissions required by GSM are established in PROD. No business messages are published during verification.
 
 **Acceptance Criteria**
 - Kafka Client ID and Identity Pool ID available
-- Access granted to topics:
-  - TS.SE.DEAL.INTERNAL-(env)
-  - TS.SE.OPERATIONAL.EVENT.ETRM.EVENT-(env)
+- Access granted to required Kafka topics
 - Consumer group `gsm.volume.acknowledgement-prod` registered
 - Producer and consumer permissions confirmed
 
@@ -51,24 +50,22 @@ Ensure Kafka identity and permissions required by GSM are established in PROD. N
 
 ---
 
-### PBI 1.3 – Databricks SQL Warehouse and Managed Identity Access Readiness
+### [GSM][ADA] Module 16.3 – Databricks SQL Warehouse and Managed Identity Access Readiness
 
 **Description**  
-Prepare GSM-owned Databricks SQL Warehouses and ensure GSM managed identity is created and granted required Databricks Unity Catalog access.
+Create GSM-owned Databricks SQL Warehouses and ensure GSM managed identity is created and granted Unity Catalog access to query TRM / PRM views in PROD.
 
 **Acceptance Criteria**
 - GSM managed identity exists in PROD
 - Unity Catalog access granted for required schemas and views
-- Databricks SQL Warehouses (standard and frequent/intraday) exist
-- Warehouse IDs captured:
-  - DatabricksConn.WarehouseId
-  - DatabricksConn.WarehouseIdForFrequentData
+- Databricks SQL Warehouses created (standard and frequent)
+- Warehouse IDs captured for configuration
 - Managed identity can query required base views
 
 **Tasks**
 - Raise ServiceNow request to create/confirm GSM managed identity
 - Raise ServiceNow request to grant Unity Catalog access
-- Track ServiceNow approvals and completion
+- Track ServiceNow approvals
 - Create Databricks SQL Warehouse for standard workloads
 - Create Databricks SQL Warehouse for frequent/intraday workloads
 - Capture Warehouse IDs
@@ -77,26 +74,27 @@ Prepare GSM-owned Databricks SQL Warehouses and ensure GSM managed identity is c
 
 ---
 
-### PBI 1.4 – TRM / PRM Base Views and Data Availability Confirmation
+### [GSM][ADA] Module 16.4 – TRM / PRM Base Views and Data Availability Confirmation
 
 **Description**  
-Confirm required TRM / PRM base views exist and data is populated in PROD.
+Confirm required TRM / PRM base views exist and are populated in PROD.
 
 **Acceptance Criteria**
-- Required base views exist and are populated
-- GSM managed identity has read access
-- Data availability confirmed
+- Required base views exist and are queryable
+- Data populated by PRM processes
+- Read access validated for GSM identities
+- Evidence captured
 
 **Tasks**
 - Coordinate with TRM / PRM team
 - Verify base view existence
 - Validate sample data presence
-- Validate read access for GSM identities
+- Validate read access
 - Capture evidence
 
 ---
 
-### PBI 1.5 – GSM Curated View Readiness
+### [GSM][ADA] Module 16.5 – GSM Curated View Readiness
 
 **Description**  
 Ensure GSM curated views exist and are populated based on PRM data.
@@ -114,10 +112,10 @@ Ensure GSM curated views exist and are populated based on PRM data.
 
 ---
 
-### PBI 1.6 – Portfolio Strategy View Readiness
+### [GSM][ADA] Module 16.6 – Portfolio Strategy View Readiness
 
 **Description**  
-Confirm portfolio strategy view availability and access.
+Confirm portfolio strategy view availability, data freshness, and access.
 
 **Acceptance Criteria**
 - portfolio_strategy view exists in PROD
@@ -133,7 +131,7 @@ Confirm portfolio strategy view availability and access.
 
 ---
 
-### PBI 1.7 – SAP MTS Interface Readiness
+### [GSM][ADA] Module 16.7 – SAP MTS Interface Readiness
 
 **Description**  
 Confirm SAP MTS files required for GSM are available via SFTP.
@@ -151,14 +149,14 @@ Confirm SAP MTS files required for GSM are available via SFTP.
 
 ---
 
-### PBI 1.8 – Deployment Governance and SOM Approval Gates
+### [GSM][ADA] Module 16.8 – Deployment Governance and SOM Approval Gates
 
 **Description**  
 Ensure quality gates and approval gates are configured for PROD deployments.
 
 **Acceptance Criteria**
 - Quality gates configured
-- Approval gates configured for Infra, API, and UI pipelines
+- Approval gates configured for Infra, API, UI
 - Approver groups validated
 - SOM sign-off obtained
 
@@ -170,13 +168,13 @@ Ensure quality gates and approval gates are configured for PROD deployments.
 
 ---
 
-### PBI 1.9 – Pre-Cutover Deployment (Services Disabled)
+### [GSM][ADA] Module 16.9 – Pre-Cutover Deployment (Services Disabled)
 
 **Description**  
 Deploy GSM components to PROD without enabling services.
 
 **Acceptance Criteria**
-- Infrastructure, API, and UI deployed successfully
+- Infrastructure, API, UI deployed successfully
 - Functions and WebJobs deployed
 - Services remain disabled
 
@@ -189,7 +187,7 @@ Deploy GSM components to PROD without enabling services.
 
 ---
 
-### PBI 1.10 – Contract Setup in GSM
+### [GSM][ADA] Module 16.10 – Contract Setup in GSM
 
 **Description**  
 Create and configure GSM contracts aligned with ETRM migration.
@@ -208,7 +206,7 @@ Create and configure GSM contracts aligned with ETRM migration.
 
 ---
 
-### PBI 1.11 – User Migration and Role/Permission Setup
+### [GSM][ADA] Module 16.11 – User Migration and Role / Permission Setup
 
 **Description**  
 Migrate users and assign roles and permissions in GSM.
@@ -227,7 +225,7 @@ Migrate users and assign roles and permissions in GSM.
 
 ---
 
-### PBI 1.12 – Application Access Enablement (Shell Access Management)
+### [GSM][ADA] Module 16.12 – Application Access Enablement (Shell Access Management)
 
 **Description**  
 Enable GSM access via Shell access management tooling.
@@ -245,7 +243,7 @@ Enable GSM access via Shell access management tooling.
 
 ---
 
-### PBI 1.13 – WAF Enablement (Pre-Go-Live)
+### [GSM][ADA] Module 16.13 – WAF Enablement (Pre-Go-Live)
 
 **Description**  
 Confirm and enable WAF for GSM UI if required.
@@ -262,9 +260,28 @@ Confirm and enable WAF for GSM UI if required.
 
 ---
 
-## Feature 2: GSM Cutover Execution
+### [GSM][ADA] Module 16.14 – Operational Readiness and SOM Handover
 
-### PBI 2.1 – Service Enablement During Cutover
+**Description**  
+Complete operational handover to SOM prior to cutover.
+
+**Acceptance Criteria**
+- Knowledge transfer completed
+- Runbooks shared
+- Escalation paths agreed
+- SOM readiness confirmed
+
+**Tasks**
+- Deliver KT sessions
+- Share runbooks
+- Agree escalation paths
+- Capture readiness confirmation
+
+---
+
+## Module 17 – GSM Cutover Execution
+
+### [GSM][ADA] Module 17.1 – Service Enablement During Cutover Window
 
 **Description**  
 Enable GSM services during the agreed cutover window.
@@ -281,7 +298,53 @@ Enable GSM services during the agreed cutover window.
 
 ---
 
-### PBI 2.2 – Post-Enablement Smoke Testing
+### [GSM][ADA] Module 17.2 – Post-Enablement Smoke Testing
 
 **Description**  
-Validate GSM stability post-e
+Validate GSM stability post-enablement.
+
+**Acceptance Criteria**
+- UI available
+- Services running without critical errors
+- Kafka stable
+
+**Tasks**
+- UI smoke tests
+- Validate Functions and WebJobs
+- Validate Kafka producer and consumer
+- Review logs
+
+---
+
+### [GSM][ADA] Module 17.3 – Cutover Go / No-Go Confirmation
+
+**Description**  
+Confirm cutover outcome and rollback decision.
+
+**Acceptance Criteria**
+- End-to-end validation complete
+- Go / No-Go decision recorded
+
+**Tasks**
+- Review validation results
+- Record decision
+- Execute rollback if required
+
+---
+
+## Module 18 – GSM Post-Cutover Hypercare
+
+### [GSM][ADA] Module 18.1 – Hypercare and User Communication
+
+**Description**  
+Provide hypercare support and communicate GSM go-live.
+
+**Acceptance Criteria**
+- Hypercare active
+- Users informed
+- SOM providing operational support
+
+**Tasks**
+- Monitor services
+- Support SOM
+- Send go-live communication
