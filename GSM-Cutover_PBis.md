@@ -10,11 +10,12 @@ It aligns with existing GSM ADA module-based backlog structure.
 ### [GSM][ADA] Module 16.1 – Pre-Cutover Environment and Configuration Readiness
 
 **Description**  
-Verify PROD environment readiness for GSM cutover by confirming environment variables, Azure DevOps Library variable groups, service connections, and Key Vault references are correctly set up and resolvable. Internal application configuration is validated via standard pipelines and is not itemised.
+Verify PROD environment readiness for GSM cutover by confirming environment variables, Azure DevOps Library variable groups, Azure Dev ops pipiline, service connections, and Key Vault references are correctly set up and resolvable. Internal application configuration is validated via standard pipelines and is not itemised.
 
 **Acceptance Criteria**
-- Required environment variables for GSM are present in PROD
+- Required environment variables for GSM are present in Azure dev ops PROD Library
 - Azure DevOps Library variable groups are correctly linked
+- Azure DevOps Pipiline are correctly configured
 - Key Vault references resolve successfully
 - Pipeline service connections and permissions authorised
 - Evidence captured for readiness confirmation
@@ -25,7 +26,6 @@ Verify PROD environment readiness for GSM cutover by confirming environment vari
 - Validate Key Vault references resolve successfully
 - Validate pipeline permissions and service connections
 - Capture readiness evidence
-- Raise and track ServiceNow requests for gaps
 
 ---
 
@@ -37,15 +37,16 @@ Ensure Kafka identity and permissions required by GSM are established in PROD. N
 **Acceptance Criteria**
 - Kafka Client ID and Identity Pool ID available
 - Access granted to required Kafka topics
-- Consumer group `gsm.volume.acknowledgement-prod` registered
+- Consumer group `gsm.volume.acknowledgement-prod` registered with Topic
 - Producer and consumer permissions confirmed
 
 **Tasks**
 - Raise DP ServiceNow request for Kafka Client ID and Identity Pool ID
-- Obtain access manifest for GSM managed identity
+- Obtain access for Topics for Identity Pool, Consumr Group
+- Raise request to add developemnt team to Identoty Pool
 - Confirm producer publish permission
 - Confirm consumer read and offset commit permission
-- Validate consumer group registration
+- Validate consumer group registration access 
 - Capture evidence
 
 ---
@@ -60,7 +61,7 @@ Create GSM-owned Databricks SQL Warehouses and ensure GSM managed identity is cr
 - Unity Catalog access granted for required schemas and views
 - Databricks SQL Warehouses created (standard and frequent)
 - Warehouse IDs captured for configuration
-- Managed identity can query required base views
+- Managed identity can query required views
 
 **Tasks**
 - Raise ServiceNow request to create/confirm GSM managed identity
@@ -81,12 +82,12 @@ Confirm required TRM / PRM base views exist and are populated in PROD.
 
 **Acceptance Criteria**
 - Required base views exist and are queryable
-- Data populated by PRM processes
+- Data populated by Migration processes
 - Read access validated for GSM identities
 - Evidence captured
 
 **Tasks**
-- Coordinate with TRM / PRM team
+- Coordinate with TRM team
 - Verify base view existence
 - Validate sample data presence
 - Validate read access
@@ -131,10 +132,10 @@ Confirm portfolio strategy view availability, data freshness, and access.
 
 ---
 
-### [GSM][ADA] Module 16.7 – SAP MTS Interface Readiness
+### [GSM][ADA] Module 16.7 – MTS Interface Readiness
 
 **Description**  
-Confirm SAP MTS files required for GSM are available via SFTP.
+Confirm MTS files required for GSM are available via SFTP.
 
 **Acceptance Criteria**
 - SFTP path exists
@@ -199,9 +200,9 @@ Create and configure GSM contracts aligned with ETRM migration.
 
 **Tasks**
 - Identify contracts in scope
-- Create contracts in GSM
-- Configure flowpoints, capacities, WGV, decline curves, deal mappings
-- Validate configuration
+- Create contracts in GSM via confiurable SQL scripts
+- craete scripts for flowpoints, capacities, WGV, decline curves, deal mappings
+- Validate contracts
 - Capture sign-off
 
 ---
@@ -218,7 +219,7 @@ Migrate users and assign roles and permissions in GSM.
 
 **Tasks**
 - Identify legacy users
-- Create users in GSM
+- Create users in GSM via configurable sql script
 - Assign roles and permissions
 - Validate access behaviour
 - Document access process
