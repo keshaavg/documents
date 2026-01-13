@@ -10,7 +10,9 @@ The purpose of this document is to:
 - Provide a structured source for raising PBIs and execution tasks
 - Capture all non-development activities required for cutover
 
-This document is intentionally not a task-level runbook.  
+This document is intentionally not a task-level runbook.
+This document focuses on configuration items and dependencies that require external coordination or pre-cutover validation. All internal application configuration values (including internal connection strings, database settings, container names, and service-specific parameters) must still be checked and validated as part of environment readiness and deployment pipelines, but are intentionally not itemised individually in this document.
+
 Detailed execution steps are expected to be tracked and delivered via PBIs raised against the activities defined here.
 
 This document is expected to evolve as cutover approaches.
@@ -61,6 +63,9 @@ This document is expected to evolve as cutover approaches.
 ---
 
 ### GSM-3 Application Configuration and Secrets
+
+Note:
+This section lists externally relevant configuration references for cutover readiness. Validation of all internal application configuration values is performed as part of standard deployment and environment readiness checks and is not exhaustively documented here.
 
 #### GSM-3.1 Kafka Configuration (to be populated)
 
