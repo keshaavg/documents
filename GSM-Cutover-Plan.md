@@ -21,7 +21,8 @@ This document is expected to evolve as cutover approaches.
 
 | Version | Date       | Type        | Summary |
 |--------|------------|-------------|---------|
-| v1.0   | 2026-01-09 | Initial     | Initial cutover framework created |
+| v1.0   | 2026-01-12 | Initial     | Initial cutover framework created |
+| v1.1   | 2026-01-13 | Review      | Updated following review |
 
 ---
 
@@ -131,6 +132,14 @@ This document is expected to evolve as cutover approaches.
 - ts_shell_energy_eun-unitycatalog-uat
 - ts_shell_energy_eun-unitycatalog-prd
 - ts_shell_energy_eun-unitycatalog-tst
+
+#### GSM-4.1a Databricks SQL Warehouse and Access Readiness (Pre-Cutover)
+
+**Activities**
+- Create Databricks SQL Warehouse(s) required for GSM workloads in PROD (standard and frequent / intraday usage).
+- Configure GSM managed identity for access to required Databricks catalogs, schemas, and views.
+- Validate GSM managed identity can successfully query required TRM / PRM base views.
+- Capture and confirm Databricks SQL Warehouse IDs for GSM configuration.
 
 #### GSM-4.2 TRM Base Views
 - Catalog: ts_shell_energy_eun-unitycatalog-<env>
